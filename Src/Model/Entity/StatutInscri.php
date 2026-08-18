@@ -5,7 +5,7 @@ class StatutInscri{
     private ?int $id;
     private string $nom;
 
-    public function __construct(string $nom,?int $id){
+    public function __construct(string $nom,?int $id=null){
         $this ->id = $id;
         $this ->nom = $nom;
 
@@ -16,5 +16,8 @@ class StatutInscri{
     public function setNom(string $nom): void { $this->nom = $nom; }
     public function getNom(): string { return $this->nom; }
 
-
+        public static function toEntity(stdClass $obj): StatutInscri
+    {
+        return new StatutInscri(nom:$obj->nom_statut);
+    }
 }

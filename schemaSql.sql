@@ -76,8 +76,13 @@ CREATE TABLE inscriptions (
     tel_tuteur VARCHAR(50) NOT NULL
  );
 
- SELECT e.*,c.nom_class,et.nom,t.*,s.nom_statut FROM eleves e  
+
+ALTER TABLE inscriptions ADD COLUMN id_super INT;
+ALTER TABLE inscriptions ADD CONSTRAINT fk_super FOREIGN KEY (id_super) REFERENCES superviseurs(id);
+ SELECT e.prenom_eleve,e.nom_eleve,e.id AS eleve_id ,e.matricule,e.date_naissance,c.id AS classe_id,c.nom_class,
+ et.id AS etablis_id,et.nom,t.prenom_tuteur,t.nom_tuteur,t.tel_tuteur,t.id AS tuteur_id,s.nom_statut,s.id AS statut_id FROM eleves e  
  INNER JOIN inscriptions i ON e.id = i.id_eleve
+ INNER JOIN statutinscription s ON s.id = i.id_statut
  INNER JOIN classes c ON c.id = i.id_classe 
  INNER JOIN tuteurs t ON t.id = e.id_tuteur 
  INNER JOIN etablissements et ON et.id = i.id_etablis ;

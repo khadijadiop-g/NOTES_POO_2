@@ -6,14 +6,13 @@ class Tuteur{
     private string $nom_tuteur;
     private string $prenom_tuteur;
     private string $tel_tuteur;
-    private Eleve $eleveId;
+    
 
-    public function __construct(string $nom_tuteur,string $prenom_tuteur,string $tel_tuteur,?int $id,Eleve $eleveId){
+    public function __construct(string $nom_tuteur,string $prenom_tuteur,string $tel_tuteur,?int $id=null){
         $this ->id = $id;
         $this ->nom_tuteur = $nom_tuteur;
         $this ->prenom_tuteur = $prenom_tuteur;
         $this ->tel_tuteur = $tel_tuteur;
-        $this ->eleveId = $eleveId;
 
     }
 
@@ -25,7 +24,10 @@ class Tuteur{
     public function getPrenomTuteur(): string { return $this->prenom_tuteur; }
     public function setTelTuteur(string $tel_tuteur): void { $this->tel_tuteur = $tel_tuteur; }
     public function getTelTuteur(): string { return $this->tel_tuteur; }
-    public function setEleveId(Eleve $eleveId): void { $this->eleveId = $eleveId; }
-    public function getEleveId(): Eleve { return $this->eleveId; }
+
+      public static function toEntity(stdClass $obj): Tuteur
+    {
+        return new Tuteur(nom_tuteur:$obj->nom_tuteur,prenom_tuteur:$obj->prenom_tuteur,tel_tuteur:$obj->tel_tuteur);
+    }
 
 }

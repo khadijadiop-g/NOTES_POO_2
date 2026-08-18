@@ -8,7 +8,8 @@
     private Eleve $eleveId;
     private StatutInscri $statutId;
      private DateTime $date_inscription;
-    public function __construct(?int $id,Classe $classeId,AnneScolaire $anneeId,Etablissement $etablisId,Eleve $eleveId,StatutInscri $statutId, DateTime $date_inscription){
+    public function __construct(?int $id=null,Classe $classeId,AnneScolaire $anneeId,Etablissement $etablisId,
+                                Eleve $eleveId,StatutInscri $statutId, DateTime $date_inscription){
     $this->id=$id;
     $this->classeId=$classeId;
     $this->anneeId=$anneeId;
@@ -32,6 +33,17 @@
     public function getDateInscription():DateTime{return $this->date_inscription;}
     public function setDateInscription(DateTime $date_inscription):void{$this->date_inscription=$date_inscription;}
 
+        public static function toEntity(stdClass $obj): Inscription
+    {
+        return new Inscription(classeId:Classe::toEntity($obj),
+                               anneeId:AnneScolaire::toEntity($obj),
+                               etablisId: Etablissement::toEntity($obj),
+                               eleveId: Eleve::toEntity($obj),
+                               statutId: StatutInscri::toEntity($obj),
+                               date_inscription: $obj->date_inscription
+                               );
+    }
+    
 
 
     }
