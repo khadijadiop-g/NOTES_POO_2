@@ -22,7 +22,9 @@ CREATE TABLE eleves(
     nom_eleve VARCHAR(50)  NOT NULL,
     prenom_eleve VARCHAR(50)  NOT NULL,
     matricule VARCHAR (50) UNIQUE,
-    date_naissance DATE NOT NULL
+    date_naissance DATE NOT NULL,
+    id_tuteur INT,
+    Foreign Key (id_tuteur) REFERENCES tuteurs(id)
 
 );
 
@@ -63,7 +65,7 @@ CREATE TABLE inscriptions (
     id SERIAL PRIMARY KEY,
     id_inscription INT,
     date_transfert DATE ,
-    type_transfert VARCHAR(50)CHECK(type_transfert IN('Entrant','Sortant')),,
+    type_transfert VARCHAR(50)CHECK(type_transfert IN('Entrant','Sortant')),
     Foreign Key (id_inscription) REFERENCES inscriptions(id)
  );
 
@@ -71,7 +73,11 @@ CREATE TABLE inscriptions (
     id SERIAL PRIMARY KEY,
     nom_tuteur VARCHAR(50) NOT NULL,
     prenom_tuteur VARCHAR(50) NOT NULL,
-    tel_tuteur VARCHAR(50) NOT NULL,
-    id_eleve INT,
-    Foreign Key (id_eleve) REFERENCES eleves(id)
+    tel_tuteur VARCHAR(50) NOT NULL
  );
+
+ SELECT e.*,c.nom_class,et.nom,t.*,s.nom_statut FROM eleves e  
+ INNER JOIN inscriptions i ON e.id = i.id_eleve
+ INNER JOIN classes c ON c.id = i.id_classe 
+ INNER JOIN tuteurs t ON t.id = e.id_tuteur 
+ INNER JOIN etablissements et ON et.id = i.id_etablis ;
