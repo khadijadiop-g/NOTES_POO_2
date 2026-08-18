@@ -14,8 +14,23 @@ private string $nom_eleve;
 private string $prenom_eleve;
 private string $matricule;
 private DateTime $date_naissance;
-private string $prenom_tuteur;
-private string $tel_tuteur;
+public function __construct(?int $id,string $nom_eleve,string $prenom_eleve,string $matricule,DateTime $date_naissance,string $prenom_tuteur,string $tel_tuteur){
+    $this->id=$id;
+    $this->nom_eleve=$nom_eleve;
+    $this->prenom_eleve=$prenom_eleve;
+    $this->matricule=$matricule;
+    $this->date_naissance=$date_naissance;
+}
+public function getId():?int{return $this->id;}
+public function getNomEleve():string{return $this->nom_eleve;}
+public function getPrenomEleve():string{return $this->prenom_eleve;}
+public function getMatricule():string{return $this->matricule;}
+public function getDateNaissance():DateTime{return $this->date_naissance;}
+public function setId(?int $id):void{$this->id=$id;}
+public function setNomEleve(string $nom_eleve):void{$this->nom_eleve=$nom_eleve;}
+public function setPrenomEleve(string $prenom_eleve):void{$this->prenom_eleve=$prenom_eleve;}
+public function setMatricule(string $matricule):void{$this->matricule=$matricule;}
+public function setDateNaissance(DateTime $date_naissance):void{$this->date_naissance=$date_naissance;}
 
 
 

@@ -12,5 +12,7 @@ class Etablissement
     }
 
     public function getId(): ?int { return $this->id; }
+    public function setId(?int $id): void { $this->id = $id; }
+    public function setNom(string $nomRole): void { $this->nomRole = $nomRole; }
     public function getNom(): string { return $this->nomRole; }
 }
