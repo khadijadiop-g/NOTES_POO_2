@@ -8,7 +8,7 @@
     private string $mot_de_passe;
     private Role $roleId;
 
-    public function __construct(?int $id=null,string $nomSup,string $prenom,string $email,string $mot_de_passe,Role $roleId){
+    public function __construct(string $nomSup,string $prenom,string $email,string $mot_de_passe,Role $roleId,?int $id=null){
     $this->id=$id;
     $this->nomSup=$nomSup;
     $this->prenom=$prenom;
@@ -32,10 +32,11 @@
 
         public static function toEntity(stdClass $obj): Superviseur
     {
-        return new Superviseur(nomSup: $obj->debut,
-                               prenom: $obj->fin,
-                               email: $obj->fin,
-                               mot_de_passe: $obj->fin,
+        return new Superviseur(nomSup: $obj->nom_sup,
+                               prenom: $obj->prenom,
+                               email: $obj->email,
+                               id: $obj->id,
+                               mot_de_passe: $obj->mot_de_passe,
                                roleId: Role::toEntity($obj)
                                
                                );

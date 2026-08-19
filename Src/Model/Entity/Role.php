@@ -18,6 +18,7 @@ class Role
 
         public static function toEntity(stdClass $obj): Role
     {
-        return new Role(nomRole:$obj->nom_role);
+        return new Role(nomRole:$obj->nom_role,
+                        id:$obj->id);
     }
 }

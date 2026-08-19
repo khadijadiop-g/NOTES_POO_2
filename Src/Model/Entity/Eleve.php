@@ -1,10 +1,3 @@
-   id SERIAL PRIMARY KEY,
-    nom_eleve VARCHAR(50)  NOT NULL,
-    prenom_eleve VARCHAR(50)  NOT NULL,
-    matricule VARCHAR (50) UNIQUE,
-    date_naissance DATE NOT NULL,
-    prenom_tuteur VARCHAR(50)  NOT NULL,
-    tel_tuteur VARCHAR(50)  NOT NULL
 
 <?php
 
@@ -16,7 +9,7 @@ private string $matricule;
 private DateTime $date_naissance;
 private Tuteur $tuteur;
 
-public function __construct(?int $id=null,string $nom_eleve,string $prenom_eleve,string $matricule,DateTime $date_naissance,Tuteur $tuteur){
+public function __construct(string $nom_eleve,string $prenom_eleve,string $matricule,DateTime $date_naissance,Tuteur $tuteur,?int $id=null){
     $this->id=$id;
     $this->nom_eleve=$nom_eleve;
     $this->prenom_eleve=$prenom_eleve;
@@ -35,6 +28,7 @@ public function setPrenomEleve(string $prenom_eleve):void{$this->prenom_eleve=$p
 public function setMatricule(string $matricule):void{$this->matricule=$matricule;}
 public function setDateNaissance(DateTime $date_naissance):void{$this->date_naissance=$date_naissance;}
 public function getTuteur():Tuteur{return $this->tuteur;}
+public function getNomComplet():string{return $this->prenom_eleve.' '.$this->nom_eleve;}
 public function setTuteur(Tuteur $tuteur):void{$this->tuteur=$tuteur;}
 
 
@@ -43,7 +37,7 @@ public function setTuteur(Tuteur $tuteur):void{$this->tuteur=$tuteur;}
         return new Eleve(nom_eleve: $obj->nom_eleve,
                          prenom_eleve: $obj->prenom_eleve,
                          matricule: $obj->matricule,
-                         date_naissance: $obj->date_naissance,
+                         date_naissance:new DateTime( $obj->date_naissance),
                          tuteur:Tuteur::toEntity($obj)
                          );
     }

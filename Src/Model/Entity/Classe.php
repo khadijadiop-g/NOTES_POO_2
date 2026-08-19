@@ -3,7 +3,7 @@
 class Classe{
     private ?int $id;
     private string $nom_class;
-    public function __construct(?int $id=null,string $nom_class){
+    public function __construct(string $nom_class,?int $id = null){
         $this->id=$id;
         $this->nom_class=$nom_class;
     }
@@ -14,6 +14,6 @@ class Classe{
 
     public static function toEntity(stdClass $obj): Classe
     {
-        return new Classe(nom_class:$obj->nom_class);
+        return new Classe(nom_class:$obj->nom_class,id:$obj->id);
     }
 }

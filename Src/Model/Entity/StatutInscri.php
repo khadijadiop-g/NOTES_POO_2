@@ -18,6 +18,6 @@ class StatutInscri{
 
         public static function toEntity(stdClass $obj): StatutInscri
     {
-        return new StatutInscri(nom:$obj->nom_statut);
+        return new StatutInscri(nom:$obj->nom_statut,id:$obj->id);
     }
 }

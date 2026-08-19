@@ -5,7 +5,7 @@ class Transfert{
     private Inscription $id_inscription;
     private DateTime $date_transfert;
     private StatutTransfert $type_transfert;
-    public function __construct(?int $id=null,Inscription $id_inscription,DateTime $date_transfert,StatutTransfert $type_transfert= StatutTransfert::ENTRANT){
+    public function __construct(Inscription $id_inscription,DateTime $date_transfert,?int $id=null,StatutTransfert $type_transfert= StatutTransfert::ENTRANT){
         $this->id=$id;
         $this->id_inscription=$id_inscription;
         $this->date_transfert=$date_transfert;  

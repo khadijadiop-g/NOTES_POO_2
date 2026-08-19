@@ -2,70 +2,54 @@
 
 class Database
 {
-    private static ?Database $instance = null;
-    private static PDO $pdo;
 
-    private function __construct()
+    private function __construct(){}
+
+    private static function getConnexion(): PDO | null
     {
-        $config = require __DIR__ . '/env.php';
 
+        $config = require __DIR__ . '/Env.php';
         try {
-            $dsn = "pgsql:host={$config['pgsql']['host']};port={$config['pgsql']['port']};dbname={$config['pgsql']['dbname']}";
-            $this->pdo = new PDO($dsn, $config['pgsql']['user'], $config['pgsql']['password']);
+            $pdo = null;
+            $dsn = "pgsql:host={$config['host']};port={$config['port']};dbname={$config['dbname']}";
+            $pdo = new PDO($dsn, $config['user'], $config['password']);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+            return $pdo;
         } catch (PDOException $e) {
-            $this->pdo = new PDO('sqlite:' . $config['sqlite']['path']);
-            $this->pdo->exec('PRAGMA foreign_keys = ON;');
+            error_log("Connexion PostgreSQL échouée : " . $e->getMessage());
+            return null;
         }
-
-        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     }
 
-    public static function getInstance(): Database
+    public static function query(string $sql, bool $single = true): mixed
     {
-        if (self::$instance === null) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
+        $query = self::getConnexion()->query($sql);
+        return $single ? $query->fetch() : $query->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public static function getConnexion(): PDO
+    private static function prepare(string $sql, array $datas): PDOStatement
     {
-        return Database::$pdo;
-
+        $prepare = Database::getConnexion()->prepare($sql);
+        $prepare->execute($datas);
+        return $prepare;
     }
 
-
-    public static function query(string $sql, bool $single = true): array
+    public static function executeQuery(string $sql, array $datas, bool $single = true): mixed
     {
-        $result = Database::$pdo->query($sql);
-        return $single ? $result->fetch() : $result->fetchAll();
+        $statement = self::prepare($sql, $datas);
+        return $single ? $statement->fetch() : $statement->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public static function prepare(string $sql, array $datas): PDOStatement
+    public static function executeUpdate(string $sql, array $datas): int|string
     {
-        $stmt = Database::$pdo->prepare($sql);
-        $stmt->execute($datas);
-        return $stmt;
+        $statement = self::prepare($sql, $datas);
+        return (str_starts_with(strtoupper(trim($sql)), 'INSERT')) ? self::getConnexion()->lastInsertId() : $statement->rowCount();
     }
 
-    public static function executeQuery(string $sql, array $datas, bool $single = true): array
+    public static function getAllData(string $tableName): array
     {
-        $stmt =Database::$pdo ->prepare($sql, $datas);
-        return $single ? $stmt->fetch() : $stmt->fetchAll();
-    }
-
-    public static function executeUpdate(string $sql, array $datas): int
-    {
-        $stmt = Database::$pdo->prepare($sql, $datas);
-
-        return str_starts_with(strtoupper($sql), 'INSERT')
-            ? (int)Database::$pdo ->lastInsertId()
-            : $stmt->rowCount();
-    }
-
-    private function __clone()
-    {
+        $sql = "SELECT * FROM $tableName";
+        return self::query($sql, false);
     }
 }
